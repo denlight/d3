@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>D3 practice</title>
+    <!-- v4 wont render map -->
+    <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://d3js.org/d3-selection-multi.v0.4.min.js"></script>
   </head>
@@ -40,6 +42,14 @@
     }
     path {
       z-index: 0;
+    }
+    .state {
+      stroke: #ffffff;
+      stroke-width: 1;
+      fill: #333;
+    }
+    .state:hover {
+      fill: #999;
     }
   </style>
   <body>
@@ -404,24 +414,30 @@
     </script>
     <!-- map -->
     <script>
+    // using v3 here
     (function() {
       'use strict';
-      var w = 300,
+      var w = 500,
           h = 300
 
-      var path = d3.geoPath()
+
+      var projection = d3.geo.albersUsa()
+        .translate([w/2,h/2])
+        .scale([w])
+
+      var path = d3.geo.path().projection(projection)
 
       var svg = d3.select('body').append('svg').attrs({width: w,height: h})
 
       d3.json('https://raw.githubusercontent.com/denlight/d3/master/us.json', function(error, data) {
-          svg.selectAll('path')
-            .data(data.features)
-            .enter()
-            .append('path')
-            .attrs({
-              d: path,
-              fill: '#555555'
-            })
+        svg.selectAll("path")
+        .data(data.features)
+        .enter()
+        .append("path")
+        .attrs({
+          d: path,
+          class: 'state'
+        })
       });
     }());
 

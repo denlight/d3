@@ -229,17 +229,6 @@
         })
     }());
     </script>
-    <!-- external data -->
-    <script>
-      var h=100,
-          w=400,
-          ds;
-
-      d3.json('https://api.github.com/repos/denlight/coyote-sample/contents/tsconfig.json', function(err,data){
-        var decoded = JSON.parse(window.atob(data.content))
-        console.log(decoded)
-      })
-    </script>
     <!-- scaling -->
     <p>
     <label for="filter">Change time Period:</label>
@@ -412,6 +401,30 @@
             buildLine(monthlySales.slice(0,this.value),'uniqueID') // add update option
         })
     }());
+    </script>
+    <!-- map -->
+    <script>
+    (function() {
+      'use strict';
+      var w = 300,
+          h = 300
+
+      var path = d3.geoPath()
+
+      var svg = d3.select('body').append('svg').attrs({width: w,height: h})
+
+      d3.json('https://raw.githubusercontent.com/denlight/d3/master/us.json', function(error, data) {
+          svg.selectAll('path')
+            .data(data.features)
+            .enter()
+            .append('path')
+            .attrs({
+              d: path,
+              fill: '#555555'
+            })
+      });
+    }());
+
 
     </script>
   </body>
